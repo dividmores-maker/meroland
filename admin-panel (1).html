@@ -1,0 +1,976 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>لوحة التحكم - Mero Land Academy</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;900&family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #1e3a5f;
+            --secondary: #2c5282;
+            --gold: #c5a572;
+            --success: #10b981;
+            --danger: #ef4444;
+            --warning: #f59e0b;
+            --dark: #1e1e1e;
+            --light: #f8fafc;
+            --gray: #64748b;
+            --border: #e2e8f0;
+        }
+
+        body {
+            font-family: 'Tajawal', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* Login Screen */
+        .login-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .login-box {
+            background: white;
+            border-radius: 24px;
+            padding: 50px;
+            width: 100%;
+            max-width: 450px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            animation: slideUp 0.6s ease-out;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .login-logo {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 36px;
+            font-weight: 900;
+            font-family: 'Cairo', sans-serif;
+            margin: 0 auto 20px;
+        }
+
+        .login-title {
+            font-family: 'Cairo', sans-serif;
+            font-size: 32px;
+            font-weight: 900;
+            color: var(--dark);
+            text-align: center;
+            margin-bottom: 10px;
+        }
+
+        .login-subtitle {
+            text-align: center;
+            color: var(--gray);
+            margin-bottom: 40px;
+            font-size: 16px;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 10px;
+            color: var(--dark);
+            font-weight: 600;
+            font-size: 15px;
+        }
+
+        .form-group input, .form-group select, .form-group textarea {
+            width: 100%;
+            padding: 15px 20px;
+            border: 2px solid var(--border);
+            border-radius: 12px;
+            font-size: 16px;
+            font-family: 'Tajawal', sans-serif;
+            transition: all 0.3s ease;
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 120px;
+        }
+
+        .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 4px rgba(30, 58, 95, 0.1);
+        }
+
+        .login-btn, .submit-btn {
+            width: 100%;
+            padding: 16px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 18px;
+            font-weight: 700;
+            font-family: 'Cairo', sans-serif;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .login-btn:hover, .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(30, 58, 95, 0.3);
+        }
+
+        .error-message {
+            background: #fee;
+            color: var(--danger);
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            text-align: center;
+            display: none;
+            font-weight: 600;
+        }
+
+        .success-message {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: var(--success);
+            color: white;
+            padding: 20px 30px;
+            border-radius: 12px;
+            font-weight: 700;
+            box-shadow: 0 10px 30px rgba(16, 185, 129, 0.3);
+            z-index: 10000;
+            transform: translateX(400px);
+            transition: transform 0.4s ease;
+            font-size: 16px;
+        }
+
+        .success-message.show {
+            transform: translateX(0);
+        }
+
+        /* Dashboard */
+        .dashboard {
+            display: none;
+            min-height: 100vh;
+        }
+
+        .dashboard.active {
+            display: block;
+        }
+
+        /* Header */
+        .dashboard-header {
+            background: white;
+            padding: 20px 40px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-logo {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .header-logo-icon {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 24px;
+            font-weight: 900;
+            font-family: 'Cairo', sans-serif;
+        }
+
+        .header-title {
+            font-family: 'Cairo', sans-serif;
+            font-size: 24px;
+            font-weight: 900;
+            color: var(--dark);
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+
+        .logout-btn {
+            padding: 10px 25px;
+            background: var(--danger);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: 'Tajawal', sans-serif;
+        }
+
+        .logout-btn:hover {
+            background: #dc2626;
+            transform: translateY(-2px);
+        }
+
+        /* Main Content */
+        .dashboard-content {
+            max-width: 1400px;
+            margin: 40px auto;
+            padding: 0 40px;
+        }
+
+        /* Stats Cards */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 25px;
+            margin-bottom: 40px;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+        }
+
+        .stat-icon {
+            font-size: 48px;
+            margin-bottom: 15px;
+        }
+
+        .stat-title {
+            color: var(--gray);
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .stat-value {
+            font-size: 36px;
+            font-weight: 900;
+            font-family: 'Cairo', sans-serif;
+            color: var(--primary);
+        }
+
+        /* Section */
+        .section {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .section-header {
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid var(--border);
+        }
+
+        .section-title {
+            font-family: 'Cairo', sans-serif;
+            font-size: 28px;
+            font-weight: 900;
+            color: var(--dark);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        /* Image Preview */
+        .image-preview {
+            width: 100%;
+            max-width: 400px;
+            height: 250px;
+            border: 3px dashed var(--border);
+            border-radius: 16px;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            margin-top: 15px;
+            position: relative;
+        }
+
+        .image-preview.active {
+            display: flex;
+        }
+
+        .image-preview img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .image-preview-placeholder {
+            text-align: center;
+            color: var(--gray);
+        }
+
+        /* News List */
+        .news-list {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .news-item {
+            background: var(--light);
+            border-radius: 16px;
+            padding: 20px;
+            display: grid;
+            grid-template-columns: 150px 1fr auto;
+            gap: 20px;
+            align-items: center;
+            transition: all 0.3s ease;
+        }
+
+        .news-item:hover {
+            transform: translateX(-5px);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .news-image {
+            width: 150px;
+            height: 100px;
+            object-fit: cover;
+            border-radius: 12px;
+        }
+
+        .news-details {
+            flex: 1;
+        }
+
+        .news-category {
+            display: inline-block;
+            padding: 4px 12px;
+            background: var(--gold);
+            color: white;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .news-title {
+            font-family: 'Cairo', sans-serif;
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--dark);
+            margin-bottom: 8px;
+        }
+
+        .news-description {
+            color: var(--gray);
+            font-size: 14px;
+            line-height: 1.6;
+            margin-bottom: 8px;
+        }
+
+        .news-date {
+            color: var(--gray);
+            font-size: 13px;
+        }
+
+        .news-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .action-btn {
+            width: 40px;
+            height: 40px;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 18px;
+            transition: all 0.3s ease;
+        }
+
+        .edit-btn {
+            background: var(--warning);
+            color: white;
+        }
+
+        .delete-btn {
+            background: var(--danger);
+            color: white;
+        }
+
+        .action-btn:hover {
+            transform: scale(1.1);
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: var(--gray);
+        }
+
+        .empty-icon {
+            font-size: 80px;
+            margin-bottom: 20px;
+            opacity: 0.5;
+        }
+
+        .empty-text {
+            font-size: 24px;
+            font-weight: 700;
+            font-family: 'Cairo', sans-serif;
+            margin-bottom: 10px;
+            color: var(--dark);
+        }
+
+        .empty-hint {
+            font-size: 16px;
+        }
+
+        /* Loading Spinner */
+        .loading-spinner {
+            text-align: center;
+            padding: 40px;
+            font-size: 48px;
+            color: var(--primary);
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .dashboard-content {
+                padding: 0 20px;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .news-item {
+                grid-template-columns: 1fr;
+            }
+
+            .news-image {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Login Screen -->
+    <div class="login-container" id="loginScreen">
+        <div class="login-box">
+            <div class="login-logo">ML</div>
+            <h1 class="login-title">لوحة التحكم</h1>
+            <p class="login-subtitle">Mero Land Academy</p>
+            
+            <div class="error-message" id="errorMessage">
+                اسم المستخدم أو كلمة المرور غير صحيحة
+            </div>
+
+            <form id="loginForm">
+                <div class="form-group">
+                    <label>اسم المستخدم</label>
+                    <input type="text" id="username" placeholder="أدخل اسم المستخدم" required>
+                </div>
+
+                <div class="form-group">
+                    <label>كلمة المرور</label>
+                    <input type="password" id="password" placeholder="أدخل كلمة المرور" required>
+                </div>
+
+                <button type="submit" class="login-btn">
+                    <span>🔐</span>
+                    <span>تسجيل الدخول</span>
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Dashboard -->
+    <div class="dashboard" id="dashboard">
+        <!-- Header -->
+        <header class="dashboard-header">
+            <div class="header-logo">
+                <div class="header-logo-icon">ML</div>
+                <h1 class="header-title">Mero Land Academy</h1>
+            </div>
+            <div class="header-actions">
+                <button class="logout-btn" onclick="logout()">
+                    🚪 تسجيل الخروج
+                </button>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="dashboard-content">
+            <!-- Success Message -->
+            <div class="success-message" id="successMessage"></div>
+
+            <!-- Stats -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon">📰</div>
+                    <div class="stat-title">إجمالي الأخبار</div>
+                    <div class="stat-value" id="totalNews">0</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">🎨</div>
+                    <div class="stat-title">أخبار الرسم</div>
+                    <div class="stat-value" id="drawingNews">0</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">💃</div>
+                    <div class="stat-title">أخبار الرقص</div>
+                    <div class="stat-value" id="danceNews">0</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">🥋</div>
+                    <div class="stat-title">الفنون القتالية</div>
+                    <div class="stat-value" id="martialArtsNews">0</div>
+                </div>
+            </div>
+
+            <!-- Add News Section -->
+            <div class="section">
+                <div class="section-header">
+                    <h2 class="section-title">
+                        <span>➕</span>
+                        <span>إضافة خبر جديد</span>
+                    </h2>
+                </div>
+
+                <form id="newsForm">
+                    <div class="form-group">
+                        <label>عنوان الخبر</label>
+                        <input type="text" name="title" placeholder="أدخل عنوان الخبر" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>التصنيف</label>
+                        <select name="category" required>
+                            <option value="">اختر التصنيف</option>
+                            <option value="drawing">🎨 الرسم</option>
+                            <option value="dance">💃 الرقص الشرقي</option>
+                            <option value="kungfu">🐲 الكونج فو</option>
+                            <option value="karate">🥋 الكاراتيه</option>
+                            <option value="gymnastics">🤸 الجمباز</option>
+                            <option value="cadeau">🎁 Cadeau</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>وصف الخبر</label>
+                        <textarea name="description" placeholder="أدخل وصف الخبر" required></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label>صورة الخبر (اختياري)</label>
+                        <input type="file" id="imageInput" accept="image/*" onchange="previewImage(event)">
+                        <p style="font-size: 13px; color: #888; margin-top: 8px;">💡 يُفضل أن يكون حجم الصورة أقل من 1 ميجابايت للحصول على أفضل أداء</p>
+                        <div class="image-preview" id="imagePreview">
+                            <img src="" alt="Preview" id="previewImg">
+                        </div>
+                    </div>
+
+                    <button type="submit" class="submit-btn">
+                        <span>💾</span>
+                        <span>نشر الخبر</span>
+                    </button>
+                </form>
+            </div>
+
+            <!-- News List Section -->
+            <div class="section">
+                <div class="section-header">
+                    <h2 class="section-title">
+                        <span>📋</span>
+                        <span>جميع الأخبار</span>
+                    </h2>
+                </div>
+
+                <div class="loading-spinner" id="loadingSpinner" style="display: none;">⏳</div>
+                <div class="news-list" id="newsList"></div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
+
+    <script>
+        // Firebase Configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyAoO8QAPGx_AWtb92p-831r8WghAA96s7s",
+            authDomain: "mero-67ecf.firebaseapp.com",
+            databaseURL: "https://mero-67ecf-default-rtdb.firebaseio.com",
+            projectId: "mero-67ecf",
+            storageBucket: "mero-67ecf.firebasestorage.app",
+            messagingSenderId: "741938477701",
+            appId: "1:741938477701:web:c4a655a6448fd7a60dc7ec"
+        };
+
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        const database = firebase.database();
+        const newsRef = database.ref('news');
+
+        /*
+         * ⚠️ IMPORTANT: Firebase Realtime Database Rules
+         * 
+         * If you're getting permission errors, make sure your Firebase rules allow writing.
+         * Go to Firebase Console → Realtime Database → Rules and use:
+         * 
+         * {
+         *   "rules": {
+         *     "news": {
+         *       ".read": true,
+         *       ".write": true
+         *     }
+         *   }
+         * }
+         * 
+         * For production, use authentication-based rules for better security.
+         */
+
+        // Configuration
+        const ADMIN_USERNAME = 'admin';
+        const ADMIN_PASSWORD = 'meroland2024';
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            checkLogin();
+        });
+
+        // Login System
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            
+            if (username === ADMIN_USERNAME && password === ADMIN_PASSWORD) {
+                sessionStorage.setItem('isLoggedIn', 'true');
+                document.getElementById('loginScreen').style.display = 'none';
+                document.getElementById('dashboard').classList.add('active');
+                document.getElementById('errorMessage').style.display = 'none';
+                
+                // Load news after login
+                loadNews();
+                updateStats();
+            } else {
+                document.getElementById('errorMessage').style.display = 'block';
+            }
+        });
+
+        function checkLogin() {
+            if (sessionStorage.getItem('isLoggedIn') === 'true') {
+                document.getElementById('loginScreen').style.display = 'none';
+                document.getElementById('dashboard').classList.add('active');
+                loadNews();
+                updateStats();
+            }
+        }
+
+        function logout() {
+            sessionStorage.removeItem('isLoggedIn');
+            location.reload();
+        }
+
+        // Image Preview
+        function previewImage(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    document.getElementById('previewImg').src = e.target.result;
+                    document.getElementById('imagePreview').classList.add('active');
+                }
+                reader.readAsDataURL(file);
+            }
+        }
+
+        // News Management
+        document.getElementById('newsForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const formData = new FormData(this);
+            const imageFile = document.getElementById('imageInput').files[0];
+            
+            // Validate form
+            if (!formData.get('title') || !formData.get('category') || !formData.get('description')) {
+                alert('يرجى ملء جميع الحقول المطلوبة');
+                return;
+            }
+            
+            const newsItem = {
+                title: formData.get('title'),
+                category: formData.get('category'),
+                description: formData.get('description'),
+                date: new Date().toLocaleDateString('ar-EG', {
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric'
+                }),
+                timestamp: Date.now()
+            };
+
+            // Handle image
+            if (imageFile) {
+                // Check file size (max 1MB)
+                if (imageFile.size > 1024 * 1024) {
+                    alert('⚠️ حجم الصورة كبير جداً! يرجى اختيار صورة أقل من 1 ميجابايت');
+                    return;
+                }
+                
+                // Check file type
+                if (!imageFile.type.startsWith('image/')) {
+                    alert('⚠️ يرجى اختيار ملف صورة فقط');
+                    return;
+                }
+                
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    newsItem.image = e.target.result;
+                    saveNewsToFirebase(newsItem);
+                }
+                reader.onerror = function() {
+                    alert('❌ حدث خطأ في قراءة الصورة. يرجى المحاولة مرة أخرى');
+                }
+                reader.readAsDataURL(imageFile);
+            } else {
+                // Use default image based on category
+                newsItem.image = getDefaultImage(newsItem.category);
+                saveNewsToFirebase(newsItem);
+            }
+        });
+
+        function getDefaultImage(category) {
+            const defaults = {
+                'drawing': 'https://images.unsplash.com/photo-1513364776144-60967b0f800f?w=400&q=80',
+                'dance': 'https://images.unsplash.com/photo-1508700929628-666bc8bd84ea?w=400&q=80',
+                'kungfu': 'https://images.unsplash.com/photo-1555597673-b21d5c935865?w=400&q=80',
+                'karate': 'https://images.unsplash.com/photo-1555597408-26bc8e548a46?w=400&q=80',
+                'gymnastics': 'https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=400&q=80',
+                'cadeau': 'https://images.unsplash.com/photo-1513885535751-8b9238bd345a?w=400&q=80'
+            };
+            return defaults[category] || 'https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=400&q=80';
+        }
+
+        function saveNewsToFirebase(newsItem) {
+            // Show loading
+            document.getElementById('loadingSpinner').style.display = 'block';
+
+            // Push to Firebase
+            newsRef.push(newsItem)
+                .then(() => {
+                    // Reset form
+                    document.getElementById('newsForm').reset();
+                    document.getElementById('imagePreview').classList.remove('active');
+                    
+                    // Hide loading
+                    document.getElementById('loadingSpinner').style.display = 'none';
+                    
+                    // Show success message
+                    showSuccess('✅ تم نشر الخبر بنجاح! سيتم مزامنته تلقائياً مع جميع المستخدمين');
+                })
+                .catch((error) => {
+                    console.error('Error saving news:', error);
+                    document.getElementById('loadingSpinner').style.display = 'none';
+                    
+                    // Show detailed error message
+                    let errorMessage = '❌ حدث خطأ أثناء نشر الخبر:\n\n';
+                    
+                    if (error.code === 'PERMISSION_DENIED') {
+                        errorMessage += '⚠️ خطأ في الصلاحيات! تأكد من:\n';
+                        errorMessage += '1. إعدادات Firebase Rules صحيحة\n';
+                        errorMessage += '2. أنك مسجل دخول بشكل صحيح';
+                    } else if (error.message.includes('size') || error.message.includes('quota')) {
+                        errorMessage += '⚠️ البيانات كبيرة جداً!\n';
+                        errorMessage += 'حاول تصغير حجم الصورة أو استخدم صورة أخرى';
+                    } else if (error.message.includes('network') || error.message.includes('connection')) {
+                        errorMessage += '⚠️ مشكلة في الاتصال بالإنترنت!\n';
+                        errorMessage += 'تأكد من اتصالك بالإنترنت وحاول مرة أخرى';
+                    } else {
+                        errorMessage += error.message || 'خطأ غير معروف';
+                        errorMessage += '\n\nتفاصيل: ' + (error.code || 'N/A');
+                    }
+                    
+                    alert(errorMessage);
+                });
+        }
+
+        function loadNews() {
+            const newsList = document.getElementById('newsList');
+            document.getElementById('loadingSpinner').style.display = 'block';
+
+            newsRef.on('value', (snapshot) => {
+                const data = snapshot.val();
+                const newsArray = [];
+
+                if (data) {
+                    Object.keys(data).forEach(key => {
+                        newsArray.push({
+                            firebaseKey: key,
+                            ...data[key]
+                        });
+                    });
+                    
+                    // Sort by timestamp (newest first)
+                    newsArray.sort((a, b) => b.timestamp - a.timestamp);
+                }
+
+                document.getElementById('loadingSpinner').style.display = 'none';
+
+                if (newsArray.length === 0) {
+                    newsList.innerHTML = `
+                        <div class="empty-state">
+                            <div class="empty-icon">📭</div>
+                            <div class="empty-text">لا توجد أخبار حالياً</div>
+                            <div class="empty-hint">ابدأ بإضافة أول خبر من النموذج أعلاه</div>
+                        </div>
+                    `;
+                    updateStats();
+                    return;
+                }
+
+                newsList.innerHTML = newsArray.map(news => `
+                    <div class="news-item">
+                        <img src="${news.image}" alt="${news.title}" class="news-image" onerror="this.src='https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=400&q=80'">
+                        <div class="news-details">
+                            <span class="news-category">${getCategoryName(news.category)}</span>
+                            <div class="news-title">${news.title}</div>
+                            <div class="news-description">${news.description}</div>
+                            <div class="news-date">📅 ${news.date}</div>
+                        </div>
+                        <div class="news-actions">
+                            <button class="action-btn delete-btn" onclick="deleteNews('${news.firebaseKey}')" title="حذف">🗑️</button>
+                        </div>
+                    </div>
+                `).join('');
+
+                updateStats();
+            }, (error) => {
+                console.error('Error loading news:', error);
+                document.getElementById('loadingSpinner').style.display = 'none';
+            });
+        }
+
+        function getCategoryName(category) {
+            const names = {
+                'drawing': '🎨 الرسم',
+                'dance': '💃 الرقص الشرقي',
+                'kungfu': '🐲 الكونج فو',
+                'karate': '🥋 الكاراتيه',
+                'gymnastics': '🤸 الجمباز',
+                'cadeau': '🎁 Cadeau'
+            };
+            return names[category] || category;
+        }
+
+        function deleteNews(firebaseKey) {
+            if (confirm('هل أنت متأكد من حذف هذا الخبر؟ سيتم حذفه من جميع المستخدمين!')) {
+                document.getElementById('loadingSpinner').style.display = 'block';
+
+                newsRef.child(firebaseKey).remove()
+                    .then(() => {
+                        document.getElementById('loadingSpinner').style.display = 'none';
+                        showSuccess('تم حذف الخبر بنجاح!');
+                    })
+                    .catch((error) => {
+                        console.error('Error deleting news:', error);
+                        document.getElementById('loadingSpinner').style.display = 'none';
+                        alert('حدث خطأ أثناء حذف الخبر. يرجى المحاولة مرة أخرى.');
+                    });
+            }
+        }
+
+        function updateStats() {
+            newsRef.once('value', (snapshot) => {
+                const data = snapshot.val();
+                const newsArray = [];
+
+                if (data) {
+                    Object.keys(data).forEach(key => {
+                        newsArray.push(data[key]);
+                    });
+                }
+
+                document.getElementById('totalNews').textContent = newsArray.length;
+                document.getElementById('drawingNews').textContent = newsArray.filter(n => n.category === 'drawing').length;
+                document.getElementById('danceNews').textContent = newsArray.filter(n => n.category === 'dance').length;
+                
+                const martialArts = newsArray.filter(n => 
+                    n.category === 'kungfu' || n.category === 'karate'
+                ).length;
+                document.getElementById('martialArtsNews').textContent = martialArts;
+            });
+        }
+
+        function showSuccess(message) {
+            const successMsg = document.getElementById('successMessage');
+            successMsg.textContent = '✓ ' + message;
+            successMsg.classList.add('show');
+            
+            setTimeout(() => {
+                successMsg.classList.remove('show');
+            }, 4000);
+        }
+    </script>
+</body>
+</html>
